@@ -1,5 +1,5 @@
 {
-  "name": "Notification",
+  "name": "Notify App",
   "author": {
     "name": "Alistair Roche",
     "email": "aroche@zendesk.com"
@@ -7,6 +7,6 @@
   "defaultLocale": "en",
   "private": true,
   "location": "top_bar",
-  "version": "1.0",
+  "version": "0.1",
   "frameworkVersion": "1.0"
 }
