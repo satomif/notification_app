@@ -3,7 +3,7 @@
   return {
     events: {
       'app.activated': 'init',
-      'click #send-msg': 'onClickSendMsg',
+      'click #send-msg': 'sendMsg',
       'click a.close': 'onClickClose',
       'keypress input.message': 'onMessageInputKeyPress',
       'notification.notificationMessage': 'handleIncomingMessage'
@@ -34,10 +34,6 @@
 
       var Markdown = this.createMarkdown();
       this.markdownConverter = new Markdown.Converter();
-    },
-
-    onClickSendMsg: function() {
-      this.sendMsg();
     },
 
     onMessageInputKeyPress: function(event) {
