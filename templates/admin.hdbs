@@ -1,0 +1,8 @@
+
+<br />
+
+<input type="text" name="message" class="message" />
+
+<button class="btn-primary" id="send-msg" style="margin-top: 10px;">
+    Send message
+</button>
