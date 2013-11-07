@@ -10,14 +10,14 @@
     },
 
     requests: {
-      'sendMsg': function(msg) {
+      'sendMsg': function(text) {
         return {
           url: '/api/v2/apps/notify',
           type: 'POST',
           data: {
             event: 'notificationMessage',
             body: {
-              msg: msg,
+              text: text,
               sender: this.currentUser().email(),
               senderName: this.currentUser().name()
             },
@@ -67,7 +67,7 @@
 
       var messageHTML = this.renderTemplate('message', {
         uuid: message.uuid,
-        msg: message.msg,
+        text: message.text,
         senderName: message.senderName
       });
 
