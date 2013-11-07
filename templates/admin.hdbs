@@ -1,4 +1,7 @@
-
+<p>
+		Send a message to all currently logged-in agents and administrators.
+</p>
+	
 <br />
 
 <input type="text" name="message" class="message" />

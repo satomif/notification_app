@@ -3,5 +3,5 @@
 	<p class="senderName">
 		{{senderName}}
 	</p>
-	<p class="messageBody">{{msg}}</p>
+	<p class="messageBody">{{{msg}}}</p>
 </li>
