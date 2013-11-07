@@ -1,10 +1,13 @@
 <p>
-		Send a message to all currently logged-in agents and administrators.
+  Send a message to all currently logged-in agents and administrators.
 </p>
-	
+
 <br />
 
+<label for="message">Message:</label>
 <input type="text" name="message" class="message" />
+
+<br />
 
 <button class="btn-primary" id="send-msg" style="margin-top: 10px;">
     Send message
