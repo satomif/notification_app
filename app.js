@@ -55,8 +55,6 @@
     },
 
     handleIncomingMessage: function(message) {
-      console.log(message);
-
       if (message.sender === this.currentUser().email()) {
         return false;
       }
