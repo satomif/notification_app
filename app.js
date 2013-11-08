@@ -100,7 +100,9 @@
         return false;
       }
 
-      if (!_.contains(this.myGroupIds, message.groupId)) {
+      var groupId = parseInt(message.groupId);
+
+      if (groupId && !_.contains(this.myGroupIds, groupId)) {
         return false;
       }
 
