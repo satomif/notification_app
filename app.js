@@ -6,11 +6,12 @@
       'click #send-msg': 'sendMsg',
       'click a.close': 'onClickClose',
       'keypress input.message': 'onMessageInputKeyPress',
-      'notification.notificationMessage': 'handleIncomingMessage'
+      'notification.notificationMessage': 'handleIncomingMessage',
+      'pane.activated': 'paneActivated'
     },
 
     requests: {
-      'sendMsg': function(text) {
+      'sendMsg': function(text, groupId) {
         return {
           url: '/api/v2/apps/notify',
           type: 'POST',
@@ -18,11 +19,24 @@
             event: 'notificationMessage',
             body: {
               text: text,
+              groupId: groupId,
               sender: this.currentUser().email(),
               senderName: this.currentUser().name()
             },
             app_id: 0
           }
+        };
+      },
+
+      'getAssignableGroups': {
+        url: '/api/v2/groups/assignable.json',
+        type: 'GET'
+      },
+
+      'getMyGroups': function() {
+        return {
+          url: '/api/v2/users/%@/group_memberships.json'.fmt(this.currentUser().id()),
+          type: 'GET'
         };
       }
     },
@@ -32,8 +46,34 @@
         this.switchTo('admin');
       }
 
+      this.ajax('getMyGroups').done(function(data) {
+        var groupMemberships = data.group_memberships;
+        this.myGroupsIds = _.map(groupMemberships, function(group) {
+          return group.id;
+        });
+      }.bind(this));
+
       var Markdown = this.createMarkdown();
       this.markdownConverter = new Markdown.Converter();
+    },
+
+    paneActivated: function(data) {
+      if (data.firstLoad) {
+        this.$('input.groups').autocomplete({
+          source: function(query, process) {
+            this.ajax('getAssignableGroups').done(function(data) {
+              var groupIds = _.map(data.groups, function(group) {
+                return {
+                  label: group.name,
+                  value: group.id
+                };
+              });
+
+              process(groupIds);
+            });
+          }.bind(this)
+        });
+      }
     },
 
     onMessageInputKeyPress: function(event) {
@@ -44,8 +84,9 @@
 
     sendMsg: function() {
       var message = this.markdownConverter.makeHtml(this.$('input.message').val());
+      var groupId = this.$('input.groups').val();
 
-      this.ajax('sendMsg', message);
+      this.ajax('sendMsg', message, groupId);
 
       this.$('input.message').val("");
     },
@@ -56,6 +97,10 @@
 
     handleIncomingMessage: function(message) {
       if (message.sender === this.currentUser().email()) {
+        return false;
+      }
+
+      if (!_.contains(this.myGroupIds, message.groupId)) {
         return false;
       }
 

@@ -9,6 +9,11 @@
 
 <br />
 
+<label for="groups">{{t "groups_label"}}:</label>
+<input type="text" name="groups" class="groups" />
+
+<br />
+
 <button class="btn-primary" id="send-msg" style="margin-top: 10px;">
     {{t "send_message_button"}}
 </button>

@@ -12,5 +12,10 @@
   "message_label": {
     "value": "Message",
     "title": "Label describing the message field"
+  },
+
+  "groups_label": {
+    "value": "Groups",
+    "title": "Label describing the groups field"
   }
 }
