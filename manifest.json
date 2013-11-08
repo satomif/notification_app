@@ -1,8 +1,8 @@
 {
   "name": "Notify App",
   "author": {
-    "name": "Alistair Roche",
-    "email": "aroche@zendesk.com"
+    "name": "Zendesk",
+    "email": "support@zendesk.com"
   },
   "defaultLocale": "en",
   "private": true,
