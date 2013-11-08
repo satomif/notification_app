@@ -6,7 +6,8 @@
       'click #send-msg': 'sendMsg',
       'click a.close': 'onClickClose',
       'keypress input.message': 'onMessageInputKeyPress',
-      'notification.notificationMessage': 'handleIncomingMessage'
+      'notification.notificationMessage': 'handleIncomingMessage',
+      'pane.activated': 'paneActivated'
     },
 
     requests: {
@@ -34,6 +35,12 @@
 
       var Markdown = this.createMarkdown();
       this.markdownConverter = new Markdown.Converter();
+    },
+
+    paneActivated: function(data) {
+      if (data.firstLoad) {
+        this.inDOM = true;
+      }
     },
 
     onMessageInputKeyPress: function(event) {
@@ -78,7 +85,11 @@
       }.bind(this);
 
       // content isn't generated until after popover, which doesn't give us a callback
-      setTimeout(addMsgToWindow, 100);
+      if (this.inDOM) {
+        addMsgToWindow();
+      } else {
+        _.defer(addMsgToWindow);
+      }
     },
 
     createMarkdown: function() {
