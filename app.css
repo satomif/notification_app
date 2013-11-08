@@ -1,11 +1,11 @@
 .senderName {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .messageBody {
-	margin-top: 1em;
+  margin-top: 1em;
 }
 
 li.message {
-	width: 70%;
+  width: 70%;
 }
