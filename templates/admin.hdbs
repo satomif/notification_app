@@ -4,7 +4,7 @@
 
 <br />
 
-<label for="message">Message:</label>
+<label for="message">{{t "message_label"}}:</label>
 <input type="text" name="message" class="message" />
 
 <br />
