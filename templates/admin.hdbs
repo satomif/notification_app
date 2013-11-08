@@ -1,5 +1,5 @@
 <p>
-  Send a message to all currently logged-in agents and administrators.
+  {{t "send_message_explanation"}}
 </p>
 
 <br />
@@ -10,5 +10,5 @@
 <br />
 
 <button class="btn-primary" id="send-msg" style="margin-top: 10px;">
-    Send message
+    {{t "send_message_button"}}
 </button>
