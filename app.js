@@ -6,8 +6,7 @@
       'click #send-msg': 'sendMsg',
       'click a.close': 'onClickClose',
       'keypress input.message': 'onMessageInputKeyPress',
-      'notification.notificationMessage': 'handleIncomingMessage',
-      'pane.activated': 'paneActivated'
+      'notification.notificationMessage': 'handleIncomingMessage'
     },
 
     requests: {
@@ -37,12 +36,6 @@
       this.markdownConverter = new Markdown.Converter();
     },
 
-    paneActivated: function(data) {
-      if (data.firstLoad) {
-        this.inDOM = true;
-      }
-    },
-
     onMessageInputKeyPress: function(event) {
       if (event.keyCode === 13) {
         this.sendMsg();
@@ -66,30 +59,26 @@
         return false;
       }
 
+      this.popover();
+
+      // defer ensures app is in DOM before we add a message
+      _.defer(this.addMsgToWindow.bind(this), message);
+    },
+
+    addMsgToWindow: function(message) {
+      // We get sent two messages, so this makes sure we only display
+      // each unique message once:
+      if (this.$('li.message[data-uuid=%@]'.fmt(message.uuid)).length > 0) {
+        return false;
+      }
+
       var messageHTML = this.renderTemplate('message', {
         uuid: message.uuid,
         text: message.text,
         senderName: message.senderName
       });
 
-      this.popover();
-
-      var addMsgToWindow = function() {
-        // We get sent two messages, so this makes sure we only display
-        // each unique message once:
-        if (this.$('li.message[data-uuid=%@]'.fmt(message.uuid)).length > 0) {
-          return false;
-        }
-
-        this.$('ul#messages').prepend(messageHTML);
-      }.bind(this);
-
-      // content isn't generated until after popover, which doesn't give us a callback
-      if (this.inDOM) {
-        addMsgToWindow();
-      } else {
-        _.defer(addMsgToWindow);
-      }
+      this.$('ul#messages').prepend(messageHTML);
     },
 
     createMarkdown: function() {
