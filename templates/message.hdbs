@@ -1,0 +1,11 @@
+<li class="message alert alert-success" data-uuid="{{uuid}}">
+  <a href="#" class="close" data-dismiss="alert">&times;</a>
+
+  <p class="senderName">
+    {{senderName}}
+  </p>
+
+  <p class="messageBody">
+    {{{text}}}
+  </p>
+</li>

@@ -1,0 +1,16 @@
+{
+  "send_message_button": {
+    "value": "Send Message",
+    "title": "Text displayed on the button the user clicks to send a message"
+  },
+
+  "send_message_explanation": {
+    "value": "Send a message to all currently logged-in agents and administrators.",
+    "title": "Text displayed above the input field that explains what the form does"
+  },
+
+  "message_label": {
+    "value": "Message",
+    "title": "Label describing the message field"
+  }
+}

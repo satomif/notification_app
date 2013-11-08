@@ -1,0 +1,14 @@
+<p>
+  {{t "send_message_explanation"}}
+</p>
+
+<br />
+
+<label for="message">{{t "message_label"}}:</label>
+<input type="text" name="message" class="message" />
+
+<br />
+
+<button class="btn-primary" id="send-msg" style="margin-top: 10px;">
+    {{t "send_message_button"}}
+</button>
