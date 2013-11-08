@@ -48,8 +48,8 @@
 
       this.ajax('getMyGroups').done(function(data) {
         var groupMemberships = data.group_memberships;
-        this.myGroupsIds = _.map(groupMemberships, function(group) {
-          return group.id;
+        this.myGroupIds = _.map(groupMemberships, function(group) {
+          return group.group_id;
         });
       }.bind(this));
 
