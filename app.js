@@ -53,6 +53,14 @@
         });
       }.bind(this));
 
+      this.ajax('getAssignableGroups').done(function(data) {
+        this.groups = {};
+
+        _.each(data.groups, function(group) {
+          this.groups[group.name] = group.id;
+        }.bind(this));
+      }.bind(this));
+
       var Markdown = this.createMarkdown();
       this.markdownConverter = new Markdown.Converter();
     },
@@ -60,18 +68,7 @@
     paneActivated: function(data) {
       if (data.firstLoad) {
         this.$('input.groups').autocomplete({
-          source: function(query, process) {
-            this.ajax('getAssignableGroups').done(function(data) {
-              var groupIds = _.map(data.groups, function(group) {
-                return {
-                  label: group.name,
-                  value: group.id
-                };
-              });
-
-              process(groupIds);
-            });
-          }.bind(this)
+          source: _.keys(this.groups)
         });
       }
     },
@@ -85,7 +82,8 @@
 
     sendMsg: function() {
       var message = this.markdownConverter.makeHtml(this.$('input.message').val());
-      var groupId = this.$('input.groups').val();
+      var groupName = this.$('input.groups').val();
+      var groupId = this.groups[groupName];
 
       this.ajax('sendMsg', message, groupId);
 
