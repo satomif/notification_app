@@ -67,7 +67,7 @@
 
       this.popover();
 
-      var addMsgToWindow = _.bind(function() {
+      var addMsgToWindow = function() {
         // We get sent two messages, so this makes sure we only display
         // each unique message once:
         if (this.$('li.message[data-uuid=%@]'.fmt(message.uuid)).length > 0) {
@@ -75,7 +75,7 @@
         }
 
         this.$('ul#messages').prepend(messageHTML);
-      }, this);
+      }.bind(this);
 
       // content isn't generated until after popover, which doesn't give us a callback
       setTimeout(addMsgToWindow, 100);
