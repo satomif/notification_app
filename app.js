@@ -77,7 +77,8 @@
     },
 
     onMessageInputKeyPress: function(event) {
-      if (event.keyCode === 13) {
+      var ENTER_KEY_CODE = 13;
+      if (event.keyCode === ENTER_KEY_CODE) {
         this.sendMsg();
       }
     },
