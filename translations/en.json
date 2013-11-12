@@ -1,16 +1,26 @@
 {
-  "send_message_button": {
-    "value": "Send Message",
+  "sendMessageButton": {
+    "value": "Broadcast",
     "title": "Text displayed on the button the user clicks to send a message"
   },
 
-  "send_message_explanation": {
-    "value": "Send a message to all currently logged-in agents and administrators.",
-    "title": "Text displayed above the input field that explains what the form does"
+  "messagePlaceholder": {
+    "value": "Share a message with your agents. Markdown is encouraged.",
+    "title": "Placeholder for message typing area"
   },
 
-  "message_label": {
-    "value": "Message",
-    "title": "Label describing the message field"
+  "cancelButton": {
+    "value": "Cancel",
+    "title": "Button to reset the form"
+  },
+
+  "imageInputButton": {
+    "value": "Add image link",
+    "title": "Button to toggle the image link input field"
+  },
+
+  "groupsPlaceholder": {
+    "value": "Want to notify a specific group?",
+    "title": "Placeholder for group selection"
   }
 }

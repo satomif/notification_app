@@ -1,3 +1,24 @@
+&.apps.popover {
+  height: 340px;
+  left: -435px;
+  width: 520px;
+}
+
+textarea.message {
+ width: 100%;
+ box-sizing: border-box;
+ height: 120px;
+ border-radius: 5px;
+}
+
+#send-msg {
+  margin-top: 10px;
+  border-radius: 4px;
+  padding: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
 .senderName {
   font-weight: bold;
 }
@@ -8,4 +29,34 @@
 
 li.message {
   width: 70%;
+}
+
+.cancel {
+  display: inline-block;
+  position: relative;
+  top: 6px;
+  left: -6px;
+}
+
+.groups {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  height: 34px;
+  border-radius: 4px;
+  margin-top: 16px;
+  margin-bottom: 11px;
+}
+
+.imageInput {
+  padding-top: 19px;
+  padding-bottom: 19px;
+  border-bottom: 1px solid #EEE;
+
+  .upload-icon {
+    display: inline-block;
+    height: 18px;
+    width: 28px;
+    background-image: app-asset-url("upload.png");
+  }
 }

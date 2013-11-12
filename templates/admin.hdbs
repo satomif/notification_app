@@ -1,14 +1,16 @@
-<p>
-  {{t "send_message_explanation"}}
-</p>
+<textarea class='message' name='message' placeholder='{{t "messagePlaceholder"}}'></textarea>
 
-<br />
+<div class='imageInput'>
+    <i class='upload-icon'></i>
+    <a href="#" class='toggleImageInput'>{{t "imageInputButton"}}</a>
 
-<label for="message">{{t "message_label"}}:</label>
-<input type="text" name="message" class="message" />
+</div>
 
-<br />
+<input class='groups' placeholder='{{t "groupsPlaceholder"}}' type="text">
 
-<button class="btn-primary" id="send-msg" style="margin-top: 10px;">
-    {{t "send_message_button"}}
-</button>
+<div class="pull-right">
+    <a href="#" class='cancel'>{{t "cancelButton"}}</a>
+    <button class="btn-primary" id="send-msg" style="margin-top: 10px;">
+        {{t "sendMessageButton"}}
+    </button>
+</div>
