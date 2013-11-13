@@ -1,5 +1,5 @@
 &.apps.popover {
-  height: 340px;
+  height: 280px;
   left: -435px;
   width: 520px;
 }
@@ -28,7 +28,8 @@ textarea.message {
 }
 
 li.message {
-  width: 70%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .cancel {
@@ -59,4 +60,14 @@ li.message {
     width: 28px;
     background-image: app-asset-url("upload.png");
   }
+}
+
+#messages {
+  margin: 0px;
+  width: 100%;
+}
+
+.toadmin {
+  margin-top: 10px;
+  margin-right: 10px;
 }

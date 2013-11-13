@@ -1,8 +1,5 @@
 <header>
-  <span class="logo"/>
+  <a href='#' class='toadmin pull-right'>{{t "toAdmin"}}</a>
   <h3>{{setting "name"}}</h3>
 </header>
 <section data-main/>
-
-<ul id="messages">
-</ul>

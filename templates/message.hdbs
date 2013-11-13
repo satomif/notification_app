@@ -5,6 +5,10 @@
     {{senderName}}
   </p>
 
+  <p class='date'>
+    {{date}}
+  </p>
+
   <p class="messageBody">
     {{{text}}}
   </p>

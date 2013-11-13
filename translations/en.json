@@ -22,5 +22,10 @@
   "groupsPlaceholder": {
     "value": "Want to notify a specific group?",
     "title": "Placeholder for group selection"
+  },
+
+  "toAdmin": {
+    "value": "Send message",
+    "title": "Go to the send message panel"
   }
 }

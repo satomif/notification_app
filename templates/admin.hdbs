@@ -1,11 +1,5 @@
 <textarea class='message' name='message' placeholder='{{t "messagePlaceholder"}}'></textarea>
 
-<div class='imageInput'>
-    <i class='upload-icon'></i>
-    <a href="#" class='toggleImageInput'>{{t "imageInputButton"}}</a>
-
-</div>
-
 <input class='groups' placeholder='{{t "groupsPlaceholder"}}' type="text">
 
 <div class="pull-right">
