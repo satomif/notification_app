@@ -147,7 +147,7 @@
         return false;
       }
 
-      this.popover();
+      try { this.popover(); } catch(err) {}
 
       // defer ensures app is in DOM before we add a message
       _.defer(this.addMsgToWindow.bind(this), message);

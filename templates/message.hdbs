@@ -1,4 +1,4 @@
-<li class="message alert alert-success" data-uuid="{{uuid}}">
+<li class="message" data-uuid="{{uuid}}">
   <a href="#" class="close" data-dismiss="alert">&times;</a>
 
   <p class="senderName">
