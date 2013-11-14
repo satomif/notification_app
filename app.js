@@ -12,7 +12,7 @@
     },
 
     requests: {
-      'sendMsg': function(text) {
+      'sendMsg': function(text, groupId) {
         return {
           url: '/api/v2/apps/notify',
           type: 'POST',
@@ -20,11 +20,24 @@
             event: 'notificationMessage',
             body: {
               text: text,
+              groupId: groupId,
               sender: this.currentUser().email(),
               senderName: this.currentUser().name()
             },
             app_id: 0
           }
+        };
+      },
+
+      'getAssignableGroups': {
+        url: '/api/v2/groups/assignable.json',
+        type: 'GET'
+      },
+
+      'getMyGroups': function() {
+        return {
+          url: '/api/v2/users/%@/group_memberships.json'.fmt(this.currentUser().id()),
+          type: 'GET'
         };
       }
     },
@@ -35,11 +48,28 @@
       if (!isAdmin) {
         this.$('.toadmin').hide();
       }
+      this.ajax('getMyGroups').done(function(data) {
+        var groupMemberships = data.group_memberships;
+        this.myGroupIds = _.map(groupMemberships, function(group) {
+          return group.group_id;
+        });
+      }.bind(this));
+
+      this.ajax('getAssignableGroups').done(function(data) {
+        this.groups = {};
+
+        _.each(data.groups, function(group) {
+          this.groups[group.name] = group.id;
+        }.bind(this));
+      }.bind(this));
     },
 
     onToadminClick: function(event) {
       event.preventDefault();
       this.switchTo('admin');
+      this.$('input.groups').autocomplete({
+        source: _.keys(this.groups)
+      });
     },
 
     onCancelClick: function(event) {
@@ -48,9 +78,18 @@
 
     sendMsg: function() {
       var message = this.$('textarea.message').val();
-      this.ajax('sendMsg', this.markdown(message));
+      var groupName = this.$('input.groups').val();
+      var groupId = this.groups[groupName];
+      this.ajax('sendMsg', this.markdown(message), groupId);
       this.$('textarea.message').val("");
       this.init();
+    },
+
+    onMessageInputKeyPress: function(event) {
+      var ENTER_KEY_CODE = 13;
+      if (event.keyCode === ENTER_KEY_CODE) {
+        this.sendMsg();
+      }
     },
 
     markdown: function(source) {
@@ -95,6 +134,12 @@
 
     handleIncomingMessage: function(message) {
       if (message.sender === this.currentUser().email()) {
+        return false;
+      }
+
+      var groupId = parseInt(message.groupId);
+
+      if (groupId && !_.contains(this.myGroupIds, groupId)) {
         return false;
       }
 
