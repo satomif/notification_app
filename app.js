@@ -43,11 +43,6 @@
     },
 
     init: function() {
-      var isAdmin = (this.currentUser().role() === "admin");
-      this.switchTo('inbox');
-      if (!isAdmin) {
-        this.$('.toadmin').hide();
-      }
       this.ajax('getMyGroups').done(function(data) {
         var groupMemberships = data.group_memberships;
         this.myGroupIds = _.map(groupMemberships, function(group) {
@@ -62,6 +57,15 @@
           this.groups[group.name] = group.id;
         }.bind(this));
       }.bind(this));
+
+      this.drawInbox();
+    },
+
+    drawInbox: function() {
+      var isAdmin = (this.currentUser().role() === "admin");
+      this.switchTo('inbox', {
+        isAdmin: isAdmin
+      });
     },
 
     onToadminClick: function(event) {

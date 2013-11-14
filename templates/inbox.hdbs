@@ -1,2 +1,3 @@
+{{#if isAdmin}}<a href='#' class='toadmin pull-right'>{{t "toAdmin"}}</a>{{/if}}
 <ul id="messages">
 </ul>

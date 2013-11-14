@@ -68,6 +68,9 @@ li.message {
 }
 
 .toadmin {
-  margin-top: 10px;
-  margin-right: 10px;
+  margin-top: 0px;
+  margin-right: 0px;
+  position: relative;
+  float: right;
+  top: -38px;
 }
