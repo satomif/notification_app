@@ -24,7 +24,7 @@
               sender: this.currentUser().email(),
               senderName: this.currentUser().name()
             },
-            app_id: 0
+            app_id: 20238
           }
         };
       },

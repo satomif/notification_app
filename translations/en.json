@@ -1,31 +1,8 @@
 {
-  "sendMessageButton": {
-    "value": "Broadcast",
-    "title": "Text displayed on the button the user clicks to send a message"
-  },
-
-  "messagePlaceholder": {
-    "value": "Share a message with your agents. Markdown is encouraged.",
-    "title": "Placeholder for message typing area"
-  },
-
-  "cancelButton": {
-    "value": "Cancel",
-    "title": "Button to reset the form"
-  },
-
-  "imageInputButton": {
-    "value": "Add image link",
-    "title": "Button to toggle the image link input field"
-  },
-
-  "groupsPlaceholder": {
-    "value": "Want to notify a specific group?",
-    "title": "Placeholder for group selection"
-  },
-
-  "toAdmin": {
-    "value": "New Message",
-    "title": "Go to the send message panel"
-  }
+  "sendMessageButton": "Broadcast",
+  "messagePlaceholder": "Share a message with your agents. Markdown is encouraged.",
+  "cancelButton": "Cancel",
+  "imageInputButton": "Add image link",
+  "groupsPlaceholder": "Want to notify a specific group?",
+  "toAdmin": "New Message"
 }
