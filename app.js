@@ -24,7 +24,7 @@
               sender: this.currentUser().email(),
               senderName: this.currentUser().name()
             },
-            app_id: 20238
+            app_id: 0
           }
         };
       },
@@ -84,7 +84,7 @@
       var message = this.$('textarea.message').val();
       var groupName = this.$('input.groups').val();
       var groupId = this.groups[groupName];
-      this.ajax('sendMsg', this.markdown(message), groupId);
+      this.ajax('sendMsg', message, groupId);
       this.$('textarea.message').val("");
       this.init();
     },
@@ -160,9 +160,13 @@
         return false;
       }
 
+      // escape HTML
+      var text = this.$('<div/>').text(message.text).html();
+      text = this.markdown(text);
+
       var messageHTML = this.renderTemplate('message', {
         uuid: message.uuid,
-        text: message.text,
+        text: text,
         senderName: message.senderName,
         date: (new Date()).toLocaleString()
       });
