@@ -22,7 +22,8 @@
               text: text,
               groupId: groupId,
               sender: this.currentUser().email(),
-              senderName: this.currentUser().name()
+              senderName: this.currentUser().name(),
+              uuid: _.uniqueId('msg')
             },
             app_id: 0
           }
