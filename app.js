@@ -14,7 +14,7 @@
     requests: {
       'sendMsg': function(text, groupId) {
         return {
-          url: '/api/v2/apps/notify',
+          url: '/api/v2/apps/notify.json',
           type: 'POST',
           data: {
             event: 'notificationMessage',
