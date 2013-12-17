@@ -8,11 +8,14 @@
       'keypress input.message': 'onMessageInputKeyPress',
       'notification.notificationMessage': 'handleIncomingMessage',
       'click .toadmin': 'onToadminClick',
-      'click .cancel': 'onCancelClick'
+      'click .cancel': 'onCancelClick',
+      'click .token .delete': 'onTokenDelete',
+      'input .add_token input': function(e) { this.formTokenInput(e.target); },
+      'focusout .add_token input': function(e) { this.formTokenInput(e.target, true); }
     },
 
     requests: {
-      'sendMsg': function(text, groupId) {
+      'sendMsg': function(text, groupIds) {
         return {
           url: '/api/v2/apps/notify.json',
           type: 'POST',
@@ -20,7 +23,7 @@
             event: 'notificationMessage',
             body: {
               text: text,
-              groupId: groupId,
+              groupIds: groupIds,
               sender: this.currentUser().email(),
               senderName: this.currentUser().name(),
               uuid: _.uniqueId('msg')
@@ -72,7 +75,7 @@
     onToadminClick: function(event) {
       event.preventDefault();
       this.switchTo('admin');
-      this.$('input.groups').autocomplete({
+      this.$('.groups input').autocomplete({
         source: _.keys(this.groups)
       });
     },
@@ -83,11 +86,25 @@
 
     sendMsg: function() {
       var message = this.$('textarea.message').val();
-      var groupName = this.$('input.groups').val();
-      var groupId = this.groups[groupName];
-      this.ajax('sendMsg', message, groupId);
+      var groupIds = this.groupsIdsForTokens(this.groupsTokens());
+      this.ajax('sendMsg', message, groupIds);
       this.$('textarea.message').val("");
       this.init();
+    },
+
+    groupsTokens: function() {
+      var tokens = [];
+      var $ = this.$;
+      this.$('.token_list .token span').each(function() {
+        tokens.push($(this).text());
+      });
+      return tokens;
+    },
+
+    groupsIdsForTokens: function(tokens) {
+      return _.map(tokens, function(token) {
+        return this.groups[token];
+      }.bind(this));
     },
 
     onMessageInputKeyPress: function(event) {
@@ -142,9 +159,8 @@
         return false;
       }
 
-      var groupId = parseInt(message.groupId, 10);
-
-      if (groupId && !_.contains(this.myGroupIds, groupId)) {
+      var targetGroupIds = _.map(message.groupIds, function(id) { return parseInt(id, 10); });
+      if (message.groupIds && !_.intersection(this.myGroupIds, targetGroupIds).length) {
         return false;
       }
 
@@ -173,8 +189,26 @@
       });
 
       this.$('ul#messages').prepend(messageHTML);
-    }
+    },
 
+    formTokenInput: function(el, force){
+      var input = this.$(el);
+      var value = input.val();
+
+      if (force && value.length > 0){
+        var li = '<li class="token"><span>'+value+'</span><a class="delete" tabindex="-1">×</a></li>';
+        this.$(el).before(li);
+        input.val('');
+        input.attr('placeholder', '');
+      }
+    },
+
+    onTokenDelete: function(e) {
+      this.$(e.target).parent('li.token').remove();
+      if (this.$('.token_list .token').size() === 0) {
+        this.$('.token_list input').attr('placeholder', this.I18n.t('groupsPlaceholder'));
+      }
+    }
   };
 
 }());
