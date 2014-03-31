@@ -1,6 +1,11 @@
 <textarea class='message' name='message' placeholder='{{t "messagePlaceholder"}}'></textarea>
 
-<input class='groups' placeholder='{{t "groupsPlaceholder"}}' type="text">
+<div class="form_field groups">
+  <ul class="token_list span12">
+    <li class="add_token"><input class="highlightable" type="text" placeholder='{{t "groupsPlaceholder"}}'></li>
+  </ul>
+</div>
+
 
 <div class="pull-right">
     <a href="#" class='cancel'>{{t "cancelButton"}}</a>

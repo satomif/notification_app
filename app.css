@@ -64,13 +64,18 @@ li.message {
 }
 
 .groups {
-  display: block;
   width: 100%;
-  box-sizing: border-box;
-  height: 34px;
-  border-radius: 4px;
   margin-top: 16px;
   margin-bottom: 11px;
+
+  ul {
+    width: 100%;
+    box-sizing: border-box;
+
+    input {
+      width: 180px;
+    }
+  }
 }
 
 .imageInput {
