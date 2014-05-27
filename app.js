@@ -28,7 +28,7 @@
               senderName: this.currentUser().name(),
               uuid: _.uniqueId('msg')
             },
-            app_id: 0
+            app_id: this.id()
           }
         };
       },
