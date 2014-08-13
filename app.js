@@ -171,6 +171,8 @@
     },
 
     addMsgToWindow: function(message) {
+      this.$('.placeholder').hide();
+
       // We get sent two messages, so this makes sure we only display
       // each unique message once:
       if (this.$('li.message[data-uuid=%@]'.fmt(message.uuid)).length > 0) {

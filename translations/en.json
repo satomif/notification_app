@@ -4,5 +4,6 @@
   "cancelButton": "Cancel",
   "imageInputButton": "Add image link",
   "groupsPlaceholder": "Want to notify a specific group?",
-  "toAdmin": "New Message"
+  "toAdmin": "New Message",
+  "placeholder": "Waiting for message..."
 }
