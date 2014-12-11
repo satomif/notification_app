@@ -154,8 +154,9 @@
       this.$(event.target).parent().remove();
     },
 
-    handleIncomingMessage: function(message) {
-      if (message.sender === this.currentUser().email()) {
+    handleIncomingMessage: function(message, sender) {
+      if (sender.email() === this.currentUser().email()
+        || sender.role() !== 'admin') {
         return false;
       }
 
