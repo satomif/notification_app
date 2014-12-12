@@ -4,7 +4,7 @@
     events: {
       'app.activated': 'init',
       'click #send-msg': 'sendMsg',
-      'click a.close': 'onClickClose',
+      'click a.close': 'onMessageCloseClick',
       'keypress input.message': 'onMessageInputKeyPress',
       'notification.notificationMessage': 'handleIncomingMessage',
       'click .toadmin': 'onToadminClick',
@@ -81,6 +81,7 @@
     },
 
     onCancelClick: function(event) {
+      event.preventDefault();
       this.init();
     },
 
@@ -151,7 +152,8 @@
       return source;
     },
 
-    onClickClose: function(event) {
+    onMessageCloseClick: function(event) {
+      event.preventDefault();
       this.$(event.target).parent().remove();
     },
 
