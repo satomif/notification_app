@@ -24,8 +24,6 @@
             body: {
               text: text,
               groupIds: groupIds,
-              sender: this.currentUser().email(),
-              senderName: this.currentUser().name(),
               uuid: _.uniqueId('msg')
             },
             app_id: this.id()
@@ -47,20 +45,22 @@
     },
 
     init: function() {
+      var self = this;
+
       this.ajax('getMyGroups').done(function(data) {
         var groupMemberships = data.group_memberships;
-        this.myGroupIds = _.map(groupMemberships, function(group) {
+        self.myGroupIds = _.map(groupMemberships, function(group) {
           return group.group_id;
         });
-      }.bind(this));
+      });
 
       this.ajax('getAssignableGroups').done(function(data) {
-        this.groups = {};
+        self.groups = {};
 
         _.each(data.groups, function(group) {
-          this.groups[group.name] = group.id;
-        }.bind(this));
-      }.bind(this));
+          self.groups[group.name] = group.id;
+        });
+      });
 
       this.drawInbox();
     },
@@ -94,17 +94,18 @@
 
     groupsTokens: function() {
       var tokens = [];
-      var $ = this.$;
-      this.$('.token_list .token span').each(function() {
-        tokens.push($(this).text());
+      var self = this;
+      this.$('.token_list .token span').each(function(el) {
+        tokens.push(self.$(el).text());
       });
       return tokens;
     },
 
     groupsIdsForTokens: function(tokens) {
+      var self = this;
       return _.map(tokens, function(token) {
-        return this.groups[token];
-      }.bind(this));
+        return self.groups[token];
+      });
     },
 
     onMessageInputKeyPress: function(event) {
@@ -154,8 +155,9 @@
       this.$(event.target).parent().remove();
     },
 
-    handleIncomingMessage: function(message) {
-      if (message.sender === this.currentUser().email()) {
+    handleIncomingMessage: function(message, sender) {
+      if (sender.email() === this.currentUser().email()
+        || sender.role() !== 'admin') {
         return false;
       }
 
@@ -167,10 +169,10 @@
       try { this.popover(); } catch(err) {}
 
       // defer ensures app is in DOM before we add a message
-      _.defer(this.addMsgToWindow.bind(this), message);
+      _.defer(this.addMsgToWindow.bind(this), message, sender);
     },
 
-    addMsgToWindow: function(message) {
+    addMsgToWindow: function(message, sender) {
       this.$('.placeholder').hide();
 
       // We get sent two messages, so this makes sure we only display
@@ -186,7 +188,7 @@
       var messageHTML = this.renderTemplate('message', {
         uuid: message.uuid,
         text: text,
-        senderName: message.senderName,
+        senderName: sender.name(),
         date: (new Date()).toLocaleString()
       });
 
