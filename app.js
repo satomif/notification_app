@@ -24,8 +24,6 @@
             body: {
               text: text,
               groupIds: groupIds,
-              sender: this.currentUser().email(),
-              senderName: this.currentUser().name(),
               uuid: _.uniqueId('msg')
             },
             app_id: this.id()
@@ -168,10 +166,10 @@
       try { this.popover(); } catch(err) {}
 
       // defer ensures app is in DOM before we add a message
-      _.defer(this.addMsgToWindow.bind(this), message);
+      _.defer(this.addMsgToWindow.bind(this), message, sender);
     },
 
-    addMsgToWindow: function(message) {
+    addMsgToWindow: function(message, sender) {
       this.$('.placeholder').hide();
 
       // We get sent two messages, so this makes sure we only display
@@ -187,7 +185,7 @@
       var messageHTML = this.renderTemplate('message', {
         uuid: message.uuid,
         text: text,
-        senderName: message.senderName,
+        senderName: sender.name(),
         date: (new Date()).toLocaleString()
       });
 
