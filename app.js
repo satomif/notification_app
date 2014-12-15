@@ -44,6 +44,8 @@
       }
     },
 
+    notifications: [],
+
     init: function() {
       var self = this;
 
@@ -70,6 +72,10 @@
       this.switchTo('inbox', {
         isAdmin: isAdmin
       });
+      var self = this;
+      _.each(this.notifications, function(notification) {
+        self.addMsgToWindow(notification.message, notification.sender);
+      })
     },
 
     onToadminClick: function(event) {
@@ -82,7 +88,7 @@
 
     onCancelClick: function(event) {
       event.preventDefault();
-      this.init();
+      this.drawInbox();
     },
 
     sendMsg: function() {
@@ -90,7 +96,7 @@
       var groupIds = this.groupsIdsForTokens(this.groupsTokens());
       this.ajax('sendMsg', message, groupIds);
       this.$('textarea.message').val("");
-      this.init();
+      this.drawInbox();
     },
 
     groupsTokens: function() {
@@ -154,7 +160,11 @@
 
     onMessageCloseClick: function(event) {
       event.preventDefault();
-      this.$(event.target).parent().remove();
+      var $notification = this.$(event.target).parent();
+      this.notifications = _.reject(this.notifications, function(notification) {
+        return notification.message.uuid === $notification.data('uuid');
+      });
+      $notification.remove();
     },
 
     handleIncomingMessage: function(message, sender) {
@@ -167,6 +177,12 @@
       if (message.groupIds && !_.intersection(this.myGroupIds, targetGroupIds).length) {
         return false;
       }
+
+      // Store notification so that we can re-render it later
+      this.notifications.push({
+        message: message,
+        sender: sender,
+      });
 
       try { this.popover(); } catch(err) {}
 
