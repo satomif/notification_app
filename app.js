@@ -156,8 +156,7 @@
     },
 
     handleIncomingMessage: function(message, sender) {
-      if (sender.email() === this.currentUser().email()
-        || sender.role() !== 'admin') {
+      if (sender.email() === this.currentUser().email() || sender.role() !== 'admin') {
         return false;
       }
 
