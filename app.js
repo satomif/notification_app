@@ -44,10 +44,12 @@
       }
     },
 
-    notifications: [],
-
     init: function() {
       var self = this;
+
+      this.notifications = [];
+      this.myGroupIds = [];
+      this.groups = {};
 
       this.ajax('getMyGroups').done(function(data) {
         var groupMemberships = data.group_memberships;
@@ -57,8 +59,6 @@
       });
 
       this.ajax('getAssignableGroups').done(function(data) {
-        self.groups = {};
-
         _.each(data.groups, function(group) {
           self.groups[group.name] = group.id;
         });
