@@ -58,7 +58,7 @@
       });
 
       this.ajax('getAssignableGroups').done(function(data) {
-        _.each(data.groups, function(group) {
+        data.groups.forEach(function(group) {
           self.groups[group.name] = group.id;
         });
       });
@@ -71,10 +71,9 @@
       this.switchTo('inbox', {
         isAdmin: isAdmin
       });
-      var self = this;
-      _.each(this.notifications, function(notification) {
-        self.addMsgToWindow(notification.message, notification.sender);
-      })
+      this.notifications.forEach(function(notification) {
+        this.addMsgToWindow(notification.message, notification.sender);
+      }, this)
     },
 
     onToadminClick: function(event) {
@@ -92,25 +91,15 @@
 
     sendMsg: function() {
       var message = this.$('textarea.message').val();
-      var groupIds = this.groupsIdsForTokens(this.groupsTokens());
+      var groupIds = _.pick(this.groups, this.tokenValues());
       this.ajax('sendMsg', message, groupIds);
       this.$('textarea.message').val("");
       this.drawInbox();
     },
 
-    groupsTokens: function() {
-      var tokens = [];
-      var self = this;
-      this.$('.token_list .token span').each(function(el) {
-        tokens.push(self.$(el).text());
-      });
-      return tokens;
-    },
-
-    groupsIdsForTokens: function(tokens) {
-      var self = this;
-      return _.map(tokens, function(token) {
-        return self.groups[token];
+    tokenValues: function() {
+      return this.$('.token_list .token span').map(function(index, token) {
+        return token.innerText;
       });
     },
 
