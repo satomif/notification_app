@@ -1,4 +1,9 @@
 (function() {
+  // jQuery.Event.which key codes. These should be normalized across browsers
+  var keyCode = {
+    ENTER: 13,
+    COMMA: 44
+  };
 
   return {
     events: {
@@ -10,8 +15,8 @@
       'click .toadmin': 'onToadminClick',
       'click .cancel': 'onCancelClick',
       'click .token .delete': 'onTokenDelete',
-      'input .add_token input': function(e) { this.formTokenInput(e.target); },
-      'focusout .add_token input': function(e) { this.formTokenInput(e.target, true); }
+      'keypress .add_token input': 'onTokenInputKeyPress',
+      'focusout .add_token input': 'onTokenInputFocusOut'
     },
 
     requests: {
@@ -104,8 +109,7 @@
     },
 
     onMessageInputKeyPress: function(event) {
-      var ENTER_KEY_CODE = 13;
-      if (event.keyCode === ENTER_KEY_CODE) {
+      if (event.which === keyCode.ENTER) {
         this.sendMsg();
       }
     },
@@ -202,15 +206,25 @@
       this.$('ul#messages').prepend(messageHTML);
     },
 
-    formTokenInput: function(el, force){
-      var input = this.$(el);
-      var value = input.val();
+    onTokenInputKeyPress: function(event) {
+      switch (event.which) {
+        case keyCode.ENTER:
+        case keyCode.COMMA:
+          this.addTokenFromInput(event.target);
+          // Prevent the character from being entered into the form input
+          return false;
+      }
+    },
 
-      if (force && value.length > 0){
-        var li = '<li class="token"><span>'+value+'</span><a class="delete" tabindex="-1">×</a></li>';
-        this.$(el).before(li);
-        input.val('');
-        input.attr('placeholder', '');
+    onTokenInputFocusOut: function(event) {
+      this.addTokenFromInput(event.target);
+    },
+
+    addTokenFromInput: function(input) {
+      if (input.value.length > 0) {
+        this.$(input.parentElement).before('<li class="token"><span>' + input.value + '</span><a class="delete" tabindex="-1">×</a></li>');
+        input.value = '';
+        input.placeholder = '';
       }
     },
 
