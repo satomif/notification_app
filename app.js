@@ -23,8 +23,7 @@
             event: 'notificationMessage',
             body: {
               text: text,
-              groupIds: groupIds,
-              uuid: _.uniqueId('msg')
+              groupIds: groupIds
             },
             app_id: this.id()
           }
@@ -177,6 +176,8 @@
       if (message.groupIds && !_.intersection(this.myGroupIds, targetGroupIds).length) {
         return false;
       }
+
+      message.uuid = _.uniqueId('msg');
 
       // Store notification so that we can re-render it later
       this.notifications.push({
