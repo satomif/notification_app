@@ -4,7 +4,7 @@
     events: {
       'app.activated': 'init',
       'click #send-msg': 'sendMsg',
-      'click a.close': 'onClickClose',
+      'click a.close': 'onMessageCloseClick',
       'keypress input.message': 'onMessageInputKeyPress',
       'notification.notificationMessage': 'handleIncomingMessage',
       'click .toadmin': 'onToadminClick',
@@ -23,8 +23,7 @@
             event: 'notificationMessage',
             body: {
               text: text,
-              groupIds: groupIds,
-              uuid: _.uniqueId('msg')
+              groupIds: groupIds
             },
             app_id: this.id()
           }
@@ -47,6 +46,10 @@
     init: function() {
       var self = this;
 
+      this.notifications = [];
+      this.myGroupIds = [];
+      this.groups = {};
+
       this.ajax('getMyGroups').done(function(data) {
         var groupMemberships = data.group_memberships;
         self.myGroupIds = _.map(groupMemberships, function(group) {
@@ -55,9 +58,7 @@
       });
 
       this.ajax('getAssignableGroups').done(function(data) {
-        self.groups = {};
-
-        _.each(data.groups, function(group) {
+        data.groups.forEach(function(group) {
           self.groups[group.name] = group.id;
         });
       });
@@ -70,6 +71,9 @@
       this.switchTo('inbox', {
         isAdmin: isAdmin
       });
+      this.notifications.forEach(function(notification) {
+        this.addMsgToWindow(notification.message, notification.sender);
+      }, this)
     },
 
     onToadminClick: function(event) {
@@ -81,30 +85,21 @@
     },
 
     onCancelClick: function(event) {
-      this.init();
+      event.preventDefault();
+      this.drawInbox();
     },
 
     sendMsg: function() {
       var message = this.$('textarea.message').val();
-      var groupIds = this.groupsIdsForTokens(this.groupsTokens());
+      var groupIds = _.pick(this.groups, this.tokenValues());
       this.ajax('sendMsg', message, groupIds);
       this.$('textarea.message').val("");
-      this.init();
+      this.drawInbox();
     },
 
-    groupsTokens: function() {
-      var tokens = [];
-      var self = this;
-      this.$('.token_list .token span').each(function(el) {
-        tokens.push(self.$(el).text());
-      });
-      return tokens;
-    },
-
-    groupsIdsForTokens: function(tokens) {
-      var self = this;
-      return _.map(tokens, function(token) {
-        return self.groups[token];
+    tokenValues: function() {
+      return this.$('.token_list .token span').map(function(index, token) {
+        return token.innerText;
       });
     },
 
@@ -151,8 +146,13 @@
       return source;
     },
 
-    onClickClose: function(event) {
-      this.$(event.target).parent().remove();
+    onMessageCloseClick: function(event) {
+      event.preventDefault();
+      var $notification = this.$(event.target).parent();
+      this.notifications = _.reject(this.notifications, function(notification) {
+        return notification.message.uuid === $notification.data('uuid');
+      });
+      $notification.remove();
     },
 
     handleIncomingMessage: function(message, sender) {
@@ -164,6 +164,14 @@
       if (message.groupIds && !_.intersection(this.myGroupIds, targetGroupIds).length) {
         return false;
       }
+
+      message.uuid = _.uniqueId('msg');
+
+      // Store notification so that we can re-render it later
+      this.notifications.push({
+        message: message,
+        sender: sender,
+      });
 
       try { this.popover(); } catch(err) {}
 
