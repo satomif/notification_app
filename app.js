@@ -211,25 +211,21 @@
     },
 
     onTokenInputKeyPress: function(event) {
-      switch (event.which) {
-        case keyCode.ENTER:
-        case keyCode.COMMA:
-          this.addTokenFromInput(event.target);
-          // Prevent the character from being entered into the form input
-          return false;
+      // Create a new token when the enter or comma keys are pressed
+      if (event.which === keyCode.ENTER || event.which === keyCode.COMMA) {
+        this.addTokenFromInput(event.target);
+        // Prevent the character from being entered into the form input
+        return false;
       }
     },
 
     onTokenInputKeyUp: function(event) {
-      switch (event.which) {
-        case keyCode.BACKSPACE:
-          if (event.target.value.length <= 0) {
-            this.$(event.target).parents('.token_list')
-                                .children('.token')
-                                .last()
-                                .remove();
-          }
-          break;
+      // Remove last token on backspace
+      if (event.which == keyCode.BACKSPACE && event.target.value.length <= 0) {
+        this.$(event.target).parents('.token_list')
+                            .children('.token')
+                            .last()
+                            .remove();
       }
     },
 
