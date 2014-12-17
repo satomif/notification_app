@@ -52,6 +52,10 @@
       }
     },
 
+    notifications: null,
+    myGroupIds: null,
+    groups: null,
+
     init: function() {
       var self = this;
 
