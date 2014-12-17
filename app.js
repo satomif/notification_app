@@ -1,6 +1,7 @@
 (function() {
   // jQuery.Event.which key codes. These should be normalized across browsers
   var keyCode = {
+    BACKSPACE: 8,
     ENTER: 13,
     COMMA: 44
   };
@@ -17,6 +18,7 @@
       'click .token .delete': 'onTokenDelete',
       'click .token_list': 'onTokenListClick',
       'keypress .add_token input': 'onTokenInputKeyPress',
+      'keyup .add_token input': 'onTokenInputKeyUp',
       'focusin .add_token input': 'onTokenInputFocusIn',
       'focusout .add_token input': 'onTokenInputFocusOut'
     },
@@ -215,6 +217,16 @@
           this.addTokenFromInput(event.target);
           // Prevent the character from being entered into the form input
           return false;
+      }
+    },
+
+    onTokenInputKeyUp: function(event) {
+      switch (event.which) {
+        case keyCode.BACKSPACE:
+          if (event.target.value.length <= 0) {
+            this.$(event.target).parents('.token_list').children('.token').last().remove();
+          }
+          break;
       }
     },
 
