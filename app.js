@@ -224,14 +224,18 @@
       switch (event.which) {
         case keyCode.BACKSPACE:
           if (event.target.value.length <= 0) {
-            this.$(event.target).parents('.token_list').children('.token').last().remove();
+            this.$(event.target).parents('.token_list')
+                                .children('.token')
+                                .last()
+                                .remove();
           }
           break;
       }
     },
 
     onTokenListClick: function(event) {
-      var input = this.$(event.target).children('.add_token').children('input')[0];
+      var input = this.$(event.target).children('.add_token')
+                                      .children('input')[0];
       if (input !== undefined) {
         input.focus();
       }
