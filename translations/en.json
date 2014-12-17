@@ -3,7 +3,7 @@
   "messagePlaceholder": "Share a message with your agents. Markdown is encouraged.",
   "cancelButton": "Cancel",
   "imageInputButton": "Add image link",
-  "groupsPlaceholder": "Want to notify a specific group?",
+  "groupsLabel": "Groups",
   "toAdmin": "New Message",
   "placeholder": "Waiting for message..."
 }

@@ -15,6 +15,7 @@
       'click .toadmin': 'onToadminClick',
       'click .cancel': 'onCancelClick',
       'click .token .delete': 'onTokenDelete',
+      'click .token_list': 'onTokenListClick',
       'keypress .add_token input': 'onTokenInputKeyPress',
       'focusin .add_token input': 'onTokenInputFocusIn',
       'focusout .add_token input': 'onTokenInputFocusOut'
@@ -217,6 +218,13 @@
       }
     },
 
+    onTokenListClick: function(event) {
+      var input = this.$(event.target).children('.add_token').children('input')[0];
+      if (input !== undefined) {
+        input.focus();
+      }
+    },
+
     onTokenInputFocusIn: function(event) {
       var $tokenList = this.$(event.target).parents('.token_list');
       $tokenList.removeClass('ui-state-default');
@@ -234,15 +242,11 @@
       if (input.value.length > 0) {
         this.$(input.parentElement).before('<li class="token"><span>' + input.value + '</span><a class="delete" tabindex="-1">×</a></li>');
         input.value = '';
-        input.placeholder = '';
       }
     },
 
     onTokenDelete: function(e) {
       this.$(e.target).parent('li.token').remove();
-      if (this.$('.token_list .token').size() === 0) {
-        this.$('.token_list input').attr('placeholder', this.I18n.t('groupsPlaceholder'));
-      }
     }
   };
 
