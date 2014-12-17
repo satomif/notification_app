@@ -9,10 +9,11 @@ section[data-main] {
 }
 
 textarea.message {
- width: 100%;
- box-sizing: border-box;
- height: 120px;
- border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  height: 120px;
+  border-radius: 5px;
+  resize: none;
 }
 
 #send-msg {
