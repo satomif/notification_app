@@ -16,6 +16,7 @@
       'click .cancel': 'onCancelClick',
       'click .token .delete': 'onTokenDelete',
       'keypress .add_token input': 'onTokenInputKeyPress',
+      'focusin .add_token input': 'onTokenInputFocusIn',
       'focusout .add_token input': 'onTokenInputFocusOut'
     },
 
@@ -216,7 +217,16 @@
       }
     },
 
+    onTokenInputFocusIn: function(event) {
+      var $tokenList = this.$(event.target).parents('.token_list');
+      $tokenList.removeClass('ui-state-default');
+      $tokenList.addClass('ui-state-focus');
+    },
+
     onTokenInputFocusOut: function(event) {
+      var $tokenList = this.$(event.target).parents('.token_list');
+      $tokenList.removeClass('ui-state-focus');
+      $tokenList.addClass('ui-state-default');
       this.addTokenFromInput(event.target);
     },
 
