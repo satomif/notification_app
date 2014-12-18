@@ -256,7 +256,8 @@
 
     addTokenFromInput: function(input) {
       if (input.value.length > 0) {
-        this.$(input.parentElement).before('<li class="token"><span>' + input.value + '</span><a class="delete" tabindex="-1">×</a></li>');
+        var tokenHTML = this.renderTemplate('group-token', { groupName: input.value });
+        this.$(input.parentElement).before(tokenHTML);
         input.value = '';
       }
     },
