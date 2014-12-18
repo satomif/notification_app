@@ -1,4 +1,10 @@
 (function() {
+  // jQuery.Event.which key codes. These should be normalized across browsers
+  var keyCode = {
+    BACKSPACE: 8,
+    ENTER: 13,
+    COMMA: 44
+  };
 
   return {
     events: {
@@ -10,8 +16,11 @@
       'click .toadmin': 'onToadminClick',
       'click .cancel': 'onCancelClick',
       'click .token .delete': 'onTokenDelete',
-      'input .add_token input': function(e) { this.formTokenInput(e.target); },
-      'focusout .add_token input': function(e) { this.formTokenInput(e.target, true); }
+      'click .token_list': 'onTokenListClick',
+      'keypress .add_token input': 'onTokenInputKeyPress',
+      'keyup .add_token input': 'onTokenInputKeyUp',
+      'focusin .add_token input': 'onTokenInputFocusIn',
+      'focusout .add_token input': 'onTokenInputFocusOut'
     },
 
     requests: {
@@ -42,6 +51,10 @@
         };
       }
     },
+
+    notifications: null,
+    myGroupIds: null,
+    groups: null,
 
     init: function() {
       var self = this;
@@ -104,8 +117,7 @@
     },
 
     onMessageInputKeyPress: function(event) {
-      var ENTER_KEY_CODE = 13;
-      if (event.keyCode === ENTER_KEY_CODE) {
+      if (event.which === keyCode.ENTER) {
         this.sendMsg();
       }
     },
@@ -202,23 +214,56 @@
       this.$('ul#messages').prepend(messageHTML);
     },
 
-    formTokenInput: function(el, force){
-      var input = this.$(el);
-      var value = input.val();
+    onTokenInputKeyPress: function(event) {
+      // Create a new token when the enter or comma keys are pressed
+      if (event.which === keyCode.ENTER || event.which === keyCode.COMMA) {
+        this.addTokenFromInput(event.target);
+        // Prevent the character from being entered into the form input
+        return false;
+      }
+    },
 
-      if (force && value.length > 0){
-        var li = '<li class="token"><span>'+value+'</span><a class="delete" tabindex="-1">×</a></li>';
-        this.$(el).before(li);
-        input.val('');
-        input.attr('placeholder', '');
+    onTokenInputKeyUp: function(event) {
+      // Remove last token on backspace
+      if (event.which == keyCode.BACKSPACE && event.target.value.length <= 0) {
+        this.$(event.target).parents('.token_list')
+                            .children('.token')
+                            .last()
+                            .remove();
+      }
+    },
+
+    onTokenListClick: function(event) {
+      var input = this.$(event.target).children('.add_token')
+                                      .children('input')[0];
+      if (input !== undefined) {
+        input.focus();
+      }
+    },
+
+    onTokenInputFocusIn: function(event) {
+      var $tokenList = this.$(event.target).parents('.token_list');
+      $tokenList.removeClass('ui-state-default');
+      $tokenList.addClass('ui-state-focus');
+    },
+
+    onTokenInputFocusOut: function(event) {
+      var $tokenList = this.$(event.target).parents('.token_list');
+      $tokenList.removeClass('ui-state-focus');
+      $tokenList.addClass('ui-state-default');
+      this.addTokenFromInput(event.target);
+    },
+
+    addTokenFromInput: function(input) {
+      if (input.value.length > 0) {
+        var tokenHTML = this.renderTemplate('group-token', { groupName: input.value });
+        this.$(input.parentElement).before(tokenHTML);
+        input.value = '';
       }
     },
 
     onTokenDelete: function(e) {
       this.$(e.target).parent('li.token').remove();
-      if (this.$('.token_list .token').size() === 0) {
-        this.$('.token_list input').attr('placeholder', this.I18n.t('groupsPlaceholder'));
-      }
     }
   };
 

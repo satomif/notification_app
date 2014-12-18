@@ -1,8 +1,9 @@
 <textarea class='message' name='message' placeholder='{{t "messagePlaceholder"}}'></textarea>
 
-<div class="form_field groups">
-  <ul class="token_list span12">
-    <li class="add_token"><input class="highlightable" type="text" placeholder='{{t "groupsPlaceholder"}}'></li>
+<div class="groups form_field">
+  <label for>{{t "groupsLabel"}}</label>
+  <ul class="span12 token_list highlightable">
+    <li class="add_token"><input class="highlightable" type="text"></li>
   </ul>
 </div>
 
