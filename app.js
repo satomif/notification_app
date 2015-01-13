@@ -54,7 +54,7 @@
 
     notifications: [],
     myGroupIds: [],
-    groups: [],
+    groups: {},
 
     init: function() {
       var self = this;
@@ -107,8 +107,8 @@
     },
 
     tokenValues: function() {
-      return this.$('.token_list .token span').map(function(index, token) {
-        return token.innerText;
+      return _.map(this.$('.token_list .token span'), function(token) {
+        return token.textContent;
       });
     },
 
