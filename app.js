@@ -24,7 +24,7 @@
     },
 
     requests: {
-      'sendMsg': function(text, groupIds) {
+      sendMsg: function(text, groupIds) {
         return {
           url: '/api/v2/apps/notify.json',
           type: 'POST',
@@ -39,12 +39,12 @@
         };
       },
 
-      'getAssignableGroups': {
+      getAssignableGroups: {
         url: '/api/v2/groups/assignable.json',
         type: 'GET'
       },
 
-      'getMyGroups': function() {
+      getMyGroups: function() {
         return {
           url: '/api/v2/users/%@/group_memberships.json'.fmt(this.currentUser().id()),
           type: 'GET'
@@ -52,16 +52,12 @@
       }
     },
 
-    notifications: null,
-    myGroupIds: null,
-    groups: null,
+    notifications: [],
+    myGroupIds: [],
+    groups: [],
 
     init: function() {
       var self = this;
-
-      this.notifications = [];
-      this.myGroupIds = [];
-      this.groups = {};
 
       this.ajax('getMyGroups').done(function(data) {
         var groupMemberships = data.group_memberships;
