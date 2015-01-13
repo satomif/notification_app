@@ -52,12 +52,16 @@
       }
     },
 
-    notifications: [],
-    myGroupIds: [],
-    groups: {},
+    notifications: null,
+    myGroupIds: null,
+    groups: null,
 
     init: function() {
       var self = this;
+
+      this.notifications = [];
+      this.myGroupIds    = [];
+      this.groups        = {};
 
       this.ajax('getMyGroups').done(function(data) {
         var groupMemberships = data.group_memberships;
