@@ -86,7 +86,7 @@
       });
       this.notifications.forEach(function(notification) {
         this.addMsgToWindow(notification.message, notification.sender);
-      }, this)
+      }, this);
     },
 
     onToadminClick: function(event) {
