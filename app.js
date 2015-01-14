@@ -103,8 +103,16 @@
     },
 
     sendMsg: function() {
-      var message = this.$('textarea.message').val();
+      var $message = this.$('textarea.message'),
+          message = $message.val();
+
+      if (/^\s*$/.test(message)) {
+        $message.focus();
+        return false;
+      }
+
       var groupIds = _.pick(this.groups, this.tokenValues());
+
       this.ajax('sendMsg', message, groupIds);
       this.$('textarea.message').val("");
       this.drawInbox();
