@@ -102,6 +102,14 @@
       this.drawInbox();
     },
 
+    message: function() {
+      return this.$('textarea.message').val();
+    },
+
+    isMessageEmpty: function() {
+      return !this.message().trim();
+    },
+
     sendMsg: function() {
       var $message = this.$('textarea.message'),
           message = $message.val();
