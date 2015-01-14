@@ -20,6 +20,11 @@ textarea.message {
   margin-top: 10px;
   border-radius: 4px;
   padding: 5px 10px;
+
+  &:disabled {
+    color: #ccc;
+    cursor: default;
+  }
 }
 
 .senderName {
@@ -95,7 +100,7 @@ li.message {
   box-sizing: border-box;
 }
 
-.toadmin {
+.new-message {
   padding: 5px 12px;
   border: 1px solid #dadada;
   border-radius: 4px;
@@ -111,4 +116,8 @@ li.message {
 
 .placeholder {
   color: #ccc;
+}
+
+.token.unknown {
+  border: 1px solid #f00;
 }
