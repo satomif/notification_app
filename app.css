@@ -119,5 +119,7 @@ li.message {
 }
 
 .token.unknown {
-  border: 1px solid #f00;
+  border: 1px solid #ebccd1;
+  background-color: #f2dede;
+  color: #a94442;
 }
