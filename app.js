@@ -90,13 +90,17 @@
       }, this);
     },
 
+    messageBox: function() {
+      return this.$('textarea.message');
+    },
+
     onNewMessageClick: function(event) {
       event.preventDefault();
       this.switchTo('admin');
       this.$('.groups input').autocomplete({
         source: _.keys(this.groups)
       });
-      this.$('textarea.message').focus();
+      this.messageBox().focus();
     },
 
     onCancelClick: function(event) {
@@ -105,7 +109,7 @@
     },
 
     message: function() {
-      return this.$('textarea.message').val();
+      return this.messageBox().val();
     },
 
     isMessageEmpty: function() {
