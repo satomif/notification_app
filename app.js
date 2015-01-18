@@ -122,7 +122,7 @@
           $groups;
 
       if (!_.isEmpty(unknownGroups)) {
-        var $groups = this.$('.token_list .token span');
+        $groups = this.$('.token_list .token span');
 
         _.each(unknownGroups, function(groupName) {
           $groups.each(function(index, group) {
