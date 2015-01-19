@@ -11,9 +11,10 @@
       'app.activated': 'init',
       'click #send-msg': 'sendMsg',
       'click a.close': 'onMessageCloseClick',
-      'keypress input.message': 'onMessageInputKeyPress',
-      'notification.notificationMessage': 'handleIncomingMessage',
-      'click .toadmin': 'onToadminClick',
+      'keyup .message': 'onNewMessageKeyUp',
+      'keypress .message': 'onNewMessageKeyPress',
+      'notification.notificationMessage': 'onIncomingMessage',
+      'click .new-message': 'onNewMessageClick',
       'click .cancel': 'onCancelClick',
       'click .token .delete': 'onTokenDelete',
       'click .token_list': 'onTokenListClick',
@@ -89,12 +90,17 @@
       }, this);
     },
 
-    onToadminClick: function(event) {
+    messageBox: function() {
+      return this.$('textarea.message');
+    },
+
+    onNewMessageClick: function(event) {
       event.preventDefault();
       this.switchTo('admin');
       this.$('.groups input').autocomplete({
         source: _.keys(this.groups)
       });
+      this.messageBox().focus();
     },
 
     onCancelClick: function(event) {
@@ -102,19 +108,36 @@
       this.drawInbox();
     },
 
+    message: function() {
+      return this.messageBox().val();
+    },
+
+    isMessageEmpty: function() {
+      return !this.message().trim();
+    },
+
     sendMsg: function() {
-      var $message = this.$('textarea.message'),
-          message = $message.val();
+      var unknownGroups = _.difference(this.tokenValues(), _.keys(this.groups)),
+          self = this,
+          $groups;
 
-      if (/^\s*$/.test(message)) {
-        $message.focus();
-        return false;
+      if (!_.isEmpty(unknownGroups)) {
+        $groups = this.$('.token_list .token span');
+
+        _.each(unknownGroups, function(groupName) {
+          $groups.each(function(index, group) {
+            var $group = self.$(group);
+            if ($group.text() == groupName) {
+              $group.closest('.token').addClass('unknown');
+            }
+          });
+        });
+
+        return;
       }
-
       var groupIds = _.pick(this.groups, this.tokenValues());
 
-      this.ajax('sendMsg', message, groupIds);
-      this.$('textarea.message').val("");
+      this.ajax('sendMsg', this.message(), groupIds);
       this.drawInbox();
     },
 
@@ -124,8 +147,14 @@
       });
     },
 
-    onMessageInputKeyPress: function(event) {
-      if (event.which === keyCode.ENTER) {
+    onNewMessageKeyUp: function() {
+      this.$('#send-msg').prop('disabled', this.isMessageEmpty());
+    },
+
+    onNewMessageKeyPress: function(event) {
+      if (this.isMessageEmpty()) { return; }
+
+      if ((event.ctrlKey || event.metaKey) && event.which === keyCode.ENTER) {
         this.sendMsg();
       }
     },
@@ -175,7 +204,7 @@
       $notification.remove();
     },
 
-    handleIncomingMessage: function(message, sender) {
+    onIncomingMessage: function(message, sender) {
       if (sender.email() === this.currentUser().email() || sender.role() !== 'admin') {
         return false;
       }
