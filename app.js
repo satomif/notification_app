@@ -165,7 +165,7 @@
       [/^### (.+?)$/m, "<h3>$1</h3>"],
       [/(\*\*|__)(.+?)\1/, "<strong>$2</strong>"],
       [/(\*|_)(.+?)\1/, "<em>$2</em>"],
-      [/!\[(.+?)\]\((.+?)\)/, '<img src="$2" alt="$1">'],
+      [/!\[(.*?)\]\((.+?)\)/, '<img src="$2" alt="$1">'],
       [/\[(.+?)\]\((\/.+?)\)/, '<a href="$2">$1</a>'],
       [/\[(.+?)\]\((.+?)\)/, '<a href="$2" target="_blank">$1</a>']
     ],
@@ -181,14 +181,14 @@
         regex = pair[0];
         replacement = pair[1];
 
-        for (match = source.match(regex); match; match = source.match(regex)) {
+        while ((match = source.match(regex))) {
           buffer.push(match[0].replace(regex, replacement));
           source = source.replace(match[0], ['@@', count, '@@'].join(''));
           ++count;
         }
       }
 
-      for (match = source.match(this.REGEXP_URL); match; match = source.match(this.REGEXP_URL)) {
+      while ((match = source.match(this.REGEXP_URL))) {
         if (match[0].match(this.REGEXP_IMAGE)) {
           replacement = '<img src="%@" alt="%@">'.fmt(match[0], match[0]);
         } else {
