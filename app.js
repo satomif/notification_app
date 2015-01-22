@@ -159,39 +159,48 @@
       }
     },
 
-    markdown: function(source) {
-      var REGEXP_URL = /https?:\/\/(\S+)/i;
-      var REGEXP_IMAGE = /https?:\/\/(\S+)\.(png|gif|bmp|jpg|jpeg|ico)/i;
-      var REPLACEMENTS = [
-        [/### (.+)\n?/g, "<h3>$1</h3>\n"],
-        [/\*\*(.+)\*\*/g, "<strong>$1</strong>"],
-        [/\*(.+)\*/g, "<em>$1</em>"],
-        [/!\[(.+)\]\((.+)\)/, '<img src="$2" alt="$1">'],
-        [/\[(.+)\]\((\/.+)\)/, '<a href="$2">$1</a>'],
-        [/\[(.+)\]\((.+)\)/, '<a href="$2" target="_blank">$1</a>']
-      ];
-      var placeholders = [];
+    REGEXP_URL: /https?:\/\/(\S+)/i,
+    REGEXP_IMAGE: /\.(png|gif|bmp|jpg|jpeg|ico)$/i,
+    REPLACEMENTS: [
+      [/^### (.+?)$/m, "<h3>$1</h3>"],
+      [/\*\*(.+?)\*\*/, "<strong>$1</strong>"],
+      [/\*(.+?)\*/, "<em>$1</em>"],
+      [/!\[(.+?)\]\((.+?)\)/, '<img src="$2" alt="$1">'],
+      [/\[(.+?)\]\((\/.+?)\)/, '<a href="$2">$1</a>'],
+      [/\[(.+?)\]\((.+?)\)/, '<a href="$2" target="_blank">$1</a>']
+    ],
 
-      for (var count = 0; true; ++count) {
-        var image = true;
-        var match = source.match(REGEXP_IMAGE);
-        if (!match) {
-          image = false;
-          match = source.match(REGEXP_URL);
+    markdown: function(source) {
+      var buffer = [],
+          count = 0,
+          match = null,
+          pair, regex, replacement;
+
+      for (var index = 0; index < this.REPLACEMENTS.length; ++index) {
+        pair = this.REPLACEMENTS[index];
+        regex = pair[0];
+        replacement = pair[1];
+
+        for (match = source.match(regex); match; match = source.match(regex)) {
+          buffer.push(match[0].replace(regex, replacement));
+          source = source.replace(match[0], ['@@', count, '@@'].join(''));
+          ++count;
         }
-        if (match) {
-          var text = "%@[%@](%@)".fmt((image ? "!" : ""), match[0], match[0]);
-          placeholders.push(text);
-          var begin = source.slice(0, match.index);
-          var end = source.slice(match.index + match[0].length);
-          source = [begin, '$$', count, '$$', end].join('');
-        } else { break; }
       }
-      _.each(placeholders, function(value, index) {
-        source = source.replace(['$$', index, '$$'].join(''), value);
-      });
-      _.each(REPLACEMENTS, function(replacement) {
-        source = source.replace(replacement[0], replacement[1]);
+
+      for (match = source.match(this.REGEXP_URL); match; match = source.match(this.REGEXP_URL)) {
+        if (match[0].match(this.REGEXP_IMAGE)) {
+          replacement = '<img src="%@" alt="%@">'.fmt(match[0], match[0]);
+        } else {
+          replacement = '<a href="%@" target="_blank">%@</a>'.fmt(match[0], match[0]);
+        }
+        source = source.replace(match[0], ['@@', count, '@@'].join(''));
+        buffer.push(replacement);
+        ++count;
+      }
+
+      _.each(buffer, function(value, index) {
+        source = source.replace(['@@', index, '@@'].join(''), value);
       });
       return source;
     },
