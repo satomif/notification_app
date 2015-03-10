@@ -1,15 +1,39 @@
 {
+  "app": {
+    "package": "notification_app"
+  },
   "button": {
-    "cancel": "Cancel",
-    "imageInput": "Add image link",
-    "sendMessage": "Broadcast"
+    "cancel": {
+      "title": "The button to click on cancel",
+      "value": "Cancel"
+    },
+    "imageInput": {
+      "title": "The button to allow users to add an image link",
+      "value": "Add image link"
+    },
+    "sendMessage": {
+      "title": "The button to broadcast a message",
+      "value": "Broadcast"
+    },
+    "toAdmin": {
+      "title": "The button to click when creating a new message to broadcast",
+      "value": "New Message"
+    }
   },
   "label": {
-    "groups": "Groups"
+    "groups": {
+      "title": "A label to highlight the category Groups",
+      "value": "Groups"
+    }
   },
   "message": {
-    "messagePlaceholder": "Share a message with your agents. Markdown is encouraged.",
-    "placeholder": "Waiting for message...",
-    "toAdmin": "New Message"
+    "messagePlaceholder": {
+      "title": "The message to display by default in the form when trying to broadcast a new message",
+      "value": "Share a message with your agents. Markdown is encouraged."
+    },
+    "placeholder": {
+      "title": "The message to display when inbox is empty and waiting for broadcast from others to display",
+      "value": "Waiting for message..."
+    }
   }
 }

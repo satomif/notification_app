@@ -1,4 +1,4 @@
-{{#if isAdmin}}<a href="#" class="new-message pull-right">{{t 'message.toAdmin'}}</a>{{/if}}
+{{#if isAdmin}}<a href="#" class="new-message pull-right">{{t 'button.toAdmin'}}</a>{{/if}}
 <p class="placeholder">{{t 'message.placeholder'}}</p>
 <ul id="messages">
 </ul>
