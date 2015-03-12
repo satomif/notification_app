@@ -7,6 +7,6 @@
   "defaultLocale": "en",
   "private": true,
   "location": "top_bar",
-  "version": "0.1",
+  "version": "0.2.1",
   "frameworkVersion": "1.0"
 }
