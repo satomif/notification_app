@@ -15,7 +15,7 @@ parts:
       value: "Add image link"
   - translation:
       key: "txt.apps.notification_app.button.sendMessage"
-      title: "The button to broadcast a message"
+      title: "The button that once you click, your message will be sent to all agents | Reference : (https://zendesk.box.com/s/1bs135f0i9mo47won2m5h9igxo514kan)"
       value: "Broadcast"
   - translation:
       key: "txt.apps.notification_app.button.toAdmin"
