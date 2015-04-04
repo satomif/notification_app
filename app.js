@@ -40,9 +40,11 @@
         };
       },
 
-      getAssignableGroups: {
-        url: '/api/v2/groups/assignable.json',
-        type: 'GET'
+      getAssignableGroups: function(page) {
+        return {
+          url: helpers.fmt('/api/v2/groups/assignable.json?page=%@', page),
+          type: 'GET'
+        };
       },
 
       getMyGroups: function() {
@@ -64,20 +66,22 @@
       this.myGroupIds    = [];
       this.groups        = {};
 
+
+      var dataLoaded = this.loadAllGroups('/api/v2/groups/assignable.json', 'groups', []);
+      dataLoaded.done(_.bind(function(data){
+        data.forEach(_.bind(function(group){
+          this.groups[group.name] = group.id;
+        }, this));
+        this.drawInbox();
+      }, this));
+
+
       this.ajax('getMyGroups').done(function(data) {
         var groupMemberships = data.group_memberships;
         self.myGroupIds = _.map(groupMemberships, function(group) {
           return group.group_id;
         });
       });
-
-      this.ajax('getAssignableGroups').done(function(data) {
-        data.groups.forEach(function(group) {
-          self.groups[group.name] = group.id;
-        });
-      });
-
-      this.drawInbox();
     },
 
     drawInbox: function() {
@@ -311,6 +315,27 @@
 
     onTokenDelete: function(e) {
       this.$(e.target).parent('li.token').remove();
+    },
+
+    loadAllGroups: function() { 
+        var first_page = this.ajax('getAssignableGroups', 1); //set up the first request
+        var entity = 'groups'; //we want groups
+        var results = []; //place to add our group arrays
+        var requests = []; //place to add our deferred objects
+        var finished = first_page.then(function(data){ //create promise to signal wnen data is done loading
+          var pages = Math.ceil(data.count/100); //figure out how many pages
+          for (var x=0;x<pages;x++) { //push that many deferreds to the array
+            var page = x + 1;
+            requests.push(this.ajax('getAssignableGroups', page));
+          }
+          return this.when.apply(this, requests).then(function(){ // when all requests are finished
+            _.each(arguments, function(x){ // grab the wanted data from the results
+              results.push(x[0][entity]);
+            });
+            return _.flatten(results); // make the array of arrays just one array (tried concat, didn't work)
+          });
+        });
+        return finished; //return the promise 'finished' so we can signal when to render app.
     }
   };
 
