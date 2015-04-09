@@ -40,9 +40,11 @@
         };
       },
 
-      getAssignableGroups: {
-        url: '/api/v2/groups/assignable.json',
-        type: 'GET'
+      getAssignableGroups: function(page) {
+        return {
+          url: helpers.fmt('/api/v2/groups/assignable.json?page=%@', page),
+          type: 'GET'
+        };
       },
 
       getMyGroups: function() {
@@ -71,13 +73,14 @@
         });
       });
 
-      this.ajax('getAssignableGroups').done(function(data) {
-        data.groups.forEach(function(group) {
-          self.groups[group.name] = group.id;
+      this.loadAllGroups().then(function(groupChunks) {
+        groupChunks.forEach(function(groupChunk) {
+          groupChunk.groups.forEach(function(group) {
+            self.groups[group.name] = group.id;
+          });
         });
+        self.drawInbox();
       });
-
-      this.drawInbox();
     },
 
     drawInbox: function() {
@@ -311,6 +314,40 @@
 
     onTokenDelete: function(e) {
       this.$(e.target).parent('li.token').remove();
+    },
+
+    loadAllGroups: function() {
+      var self = this;
+
+      return this.promise(function(done) {
+        self.groupRequests().then(function(requests) {
+          self.when.apply(self, requests).then(function() {
+            if (requests.length === 1) {
+              done([arguments[0]]);
+            } else if (requests.length > 1) {
+              done(_.pluck(arguments, 0));
+            } else {
+              done([]);
+            }
+          });
+        });
+      });
+    },
+
+    groupRequests: function() {
+      var self = this;
+
+      return this.promise(function(done) {
+        var first_page = this.ajax('getAssignableGroups', 1);
+
+        first_page.then(function(data){
+          var pages = Math.ceil(data.count / 100);
+
+          done([first_page].concat(_.range(2, pages + 1).map(function(page) {
+            return self.ajax('getAssignableGroups', page);
+          })));
+        });
+      });
     }
   };
 
