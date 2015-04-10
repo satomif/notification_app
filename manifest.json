@@ -5,7 +5,7 @@
     "email": "support@zendesk.com"
   },
   "defaultLocale": "en",
-  "private": true,
+  "private": false,
   "location": "top_bar",
   "version": "0.2.3",
   "frameworkVersion": "1.0"
