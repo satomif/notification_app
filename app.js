@@ -111,12 +111,12 @@
       this.drawInbox();
     },
 
-    message: function() {
+    messageBoxValue: function() {
       return this.messageBox().val();
     },
 
     isMessageEmpty: function() {
-      return !this.message().trim();
+      return !this.messageBoxValue().trim();
     },
 
     sendMsg: function() {
@@ -140,7 +140,7 @@
       }
       var groupIds = _.pick(this.groups, this.tokenValues());
 
-      this.ajax('sendMsg', this.message(), groupIds);
+      this.ajax('sendMsg', this.messageBoxValue(), groupIds);
       this.drawInbox();
     },
 
