@@ -1,11 +1,7 @@
 &.apps.popover {
   height: 280px;
   left: -435px;
-  width: 520px;
-}
-
-section[data-main] {
-  position: relative;
+  width: 250px;
 }
 
 textarea.message {
@@ -17,12 +13,43 @@ textarea.message {
 }
 
 #send-msg {
-  margin-top: 10px;
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  padding: 5px 12px;
+  border: 1px;
+  border-color: #D6D6D6;
   border-radius: 4px;
-  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 12px;
+  color: #D6D6D6;
+  background-color: #404040;
+  background-image: -webkit-linear-
+    gradient(top, #555555, #222222);
+  background-repeat: repeat-x;
+  position: relative;
+  top: 10px;
 
   &:disabled {
-    color: #ccc;
+    background-color: #ddd;
+    border-color: #ddd;
+    color: #fff;
+    opacity: 1;
+    box-shadow: none;
+  }
+}
+
+#send-msg:hover {
+  background-color: #3D3D3D;
+  color: white;
+  border: 1px;
+  border-color: #3D3D3D;
+
+  &:disabled {
+    background-color: #ddd;
+    border-color: #ddd;
+    color: #fff;
+    opacity: 1;
+    box-shadow: none;
     cursor: default;
   }
 }
@@ -36,16 +63,16 @@ textarea.message {
 }
 
 li.message {
-  width: 100%;
-  box-sizing: border-box;
+  width: 230px;
   padding-top: 19px;
   border-top: 1px solid #eee;
   margin-top: 19px;
-  padding-left: 10px;
   padding-right: 10px;
+  padding-left: 10px;
 
   .date {
-    font-size: 11px
+    font-size: 10px;
+    color: #999999;
   }
 
   .close {
@@ -55,16 +82,42 @@ li.message {
 
   &:first-child {
     padding-top: 0px;
-    margin-top: 0px;
     border-top: 0px;
+    margin-top: 0px;
+
+    .close {
+      position: relative;
+      right: -94px;
+    }
   }
 }
 
 .cancel {
-  display: inline-block;
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  padding: 5px 12px;
+  border: 1px;
+  border-style: solid;
+  border-color: #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 12px;
+  color: #555;
+  background-color: #fff;
+  background-image: -webkit-linear-
+    gradient(top, #555555, #222222);
+  background-repeat: repeat-x;
   position: relative;
-  top: 6px;
+  top: 10px;
   left: -6px;
+}
+
+.cancel:hover {
+  background-color: #fbfbfb;
+  color: #222222;
+  border: 1px;
+  border-style: solid;
+  border-color: #ccc;
 }
 
 .groups {
@@ -73,12 +126,21 @@ li.message {
   margin-bottom: 11px;
 
   ul {
-    width: 100%;
+    width: 206px;
     box-sizing: border-box;
+    border-radius: 3px;
 
     input {
-      width: 118px;
+      width: 196px;
     }
+  }
+}
+
+li.token {
+  margin-left: 4px;
+
+  a.delete {
+    background-color: #fafafa;
   }
 }
 
@@ -101,17 +163,28 @@ li.message {
 }
 
 .new-message {
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.2s;
   padding: 5px 12px;
-  border: 1px solid #dadada;
+  border: 1px;
+  border-color: #D6D6D6;
   border-radius: 4px;
   font-size: 12px;
   line-height: 12px;
-  color: #333;
-  background-color: #fefefe;
-  background: linear-gradient(to bottom, #fefefe 0%,#fefefe 2%,#fbfbfb 2%,#f2f2f2 100%);
-  position: absolute;
-  top: -32px;
-  right: 10px;
+  color: #D6D6D6;
+  background-color: #222222;
+  background-image: -webkit-linear-
+    gradient(top, #555555, #222222);
+  background-repeat: repeat-x;
+  position: relative;
+  top: -41px;
+}
+
+.new-message.pull-right:hover {
+  background-color: #3D3D3D;
+  color: #fff;
+  border: 1px;
+  border-color: #3D3D3D;
 }
 
 .placeholder {
