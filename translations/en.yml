@@ -23,7 +23,7 @@ parts:
       key: "txt.apps.notification_app.button.toAdmin"
       title: "The button to click when creating a new message to broadcast. https://zendesk.box.com/s/h87e6k7zxy3xot81dlj5vgfpjrcydevs"
       screenshot: "https://zendesk.box.com/s/h87e6k7zxy3xot81dlj5vgfpjrcydevs"
-      value: "New Message"
+      value: "New message"
   - translation:
       key: "txt.apps.notification_app.label.groups"
       title: "A label to highlight the category Groups. https://zendesk.box.com/s/oan0oc4al5be138zmu3b9iwiudjqav9k"
