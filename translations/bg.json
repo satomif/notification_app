@@ -1,15 +1,15 @@
 {
   "button": {
-    "cancel": "Cancel",
-    "imageInput": "Add image link",
-    "sendMessage": "Broadcast",
-    "toAdmin": "New Message"
+    "cancel": "Отмяна",
+    "imageInput": "Добавяне на линк към изображението",
+    "sendMessage": "Разпространяване",
+    "toAdmin": "Ново съобщение"
   },
   "label": {
-    "groups": "Groups"
+    "groups": "Групи"
   },
   "message": {
-    "messagePlaceholder": "Share a message with your agents. Markdown is encouraged.",
-    "placeholder": "Waiting for message..."
+    "messagePlaceholder": "Споделете съобщение с консултантите си. Препоръчва се използването на Markdown.",
+    "placeholder": "Изчакване на съобщение..."
   }
 }

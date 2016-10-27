@@ -1,7 +1,7 @@
 {
   "button": {
     "cancel": "Avbryt",
-    "imageInput": "Legg til bildekobling",
+    "imageInput": "Legg til bildelenke",
     "sendMessage": "Send til alle",
     "toAdmin": "Ny melding"
   },

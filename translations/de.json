@@ -9,7 +9,7 @@
     "groups": "Gruppen"
   },
   "message": {
-    "messagePlaceholder": "Nachricht an alle Ihre Agenten. Markdown wird unterstützt.",
+    "messagePlaceholder": "Nachricht an alle Ihre Agenten senden. Markdown wird empfohlen.",
     "placeholder": "Wartet auf Nachricht..."
   }
 }
