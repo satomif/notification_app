@@ -4,6 +4,28 @@
     "name": "Zendesk",
     "email": "support@zendesk.com"
   },
+  "parameters" : [
+    {
+      "name": "notify_admin",
+      "type": "text",
+      "default": "true"
+    },
+    {
+      "name": "notify_agent",
+      "type": "text",
+      "default": "true"
+    },
+    {
+      "name": "notify_end-user",
+      "type": "text",
+      "default": "false"
+    },
+    {
+      "name": "id_agent",
+      "type": "text",
+      "default": "15525947"
+    }
+  ],
   "defaultLocale": "en",
   "private": false,
   "location": "top_bar",

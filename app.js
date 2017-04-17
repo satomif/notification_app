@@ -18,10 +18,7 @@
       'click .cancel': 'onCancelClick',
       'click .token .delete': 'onTokenDelete',
       'click .token_list': 'onTokenListClick',
-      'keypress .add_token input': 'onTokenInputKeyPress',
-      'keyup .add_token input': 'onTokenInputKeyUp',
-      'focusin .add_token input': 'onTokenInputFocusIn',
-      'focusout .add_token input': 'onTokenInputFocusOut'
+      'click .select_token_submit': 'onSelectClick'
     },
 
     requests: {
@@ -35,7 +32,8 @@
               text: text,
               groupIds: groupIds
             },
-            app_id: this.id()
+//            app_id: this.id()
+            app_id: 0
           }
         };
       },
@@ -84,13 +82,27 @@
     },
 
     drawInbox: function() {
-      var isAdmin = (this.currentUser().role() === "admin");
+      var ids = {};
+      ids[this.setting('id_agent')] = 'agent';
+      var isNotify = (this.setting('notify_' + ids[this.currentUser().role()]) === 'true');
       this.switchTo('inbox', {
-        isAdmin: isAdmin
+        isNotify: isNotify
       });
+      console.log('notifications:');
+      console.log(this.notifications);
       this.notifications.forEach(function(notification) {
         this.addMsgToWindow(notification.message, notification.sender);
       }, this);
+    },
+
+    drawSelectBox: function() {
+      var html = '<select name="group">';
+      html += '<option value="">-</option>';
+      Object.keys(this.groups).forEach(function (key) {
+        html += '<option value="' + this.groups[key] + '">' + key + '</option>';
+      }, this);
+      html += '</select>';
+      this.$('.select_groups').html(html);
     },
 
     messageBox: function() {
@@ -104,11 +116,18 @@
         source: _.keys(this.groups)
       });
       this.messageBox().focus();
+      this.drawSelectBox();
     },
 
     onCancelClick: function(event) {
       event.preventDefault();
       this.drawInbox();
+    },
+
+    onSelectClick: function() {
+      // グループ指定時
+      var groupId = this.$('.select_groups option:selected').val();
+      this.$('.token_list').append('<li class="group_id">' + groupId +  '</li>');
     },
 
     messageBoxValue: function() {
@@ -120,32 +139,16 @@
     },
 
     sendMsg: function() {
-      var unknownGroups = _.difference(this.tokenValues(), _.keys(this.groups)),
-          self = this,
-          $groups;
-
-      if (!_.isEmpty(unknownGroups)) {
-        $groups = this.$('.token_list .token span');
-
-        _.each(unknownGroups, function(groupName) {
-          $groups.each(function(index, group) {
-            var $group = self.$(group);
-            if ($group.text() == groupName) {
-              $group.closest('.token').addClass('unknown');
-            }
-          });
-        });
-
-        return;
-      }
-      var groupIds = _.pick(this.groups, this.tokenValues());
+      console.log('token_list:');
+      console.log(this.tokenValues());
+      var groupIds = this.tokenValues();
 
       this.ajax('sendMsg', this.messageBoxValue(), groupIds);
       this.drawInbox();
     },
 
     tokenValues: function() {
-      return _.map(this.$('.token_list .token span'), function(token) {
+      return _.map(this.$('.token_list').children(), function(token) {
         return token.textContent;
       });
     },
@@ -262,58 +265,6 @@
       });
 
       this.$('ul#messages').prepend(messageHTML);
-    },
-
-    onTokenInputKeyPress: function(event) {
-      // Create a new token when the enter or comma keys are pressed
-      if (event.which === keyCode.ENTER || event.which === keyCode.COMMA) {
-        this.addTokenFromInput(event.target);
-        // Prevent the character from being entered into the form input
-        return false;
-      }
-    },
-
-    onTokenInputKeyUp: function(event) {
-      // Remove last token on backspace
-      if (event.which == keyCode.BACKSPACE && event.target.value.length <= 0) {
-        this.$(event.target).parents('.token_list')
-                            .children('.token')
-                            .last()
-                            .remove();
-      }
-    },
-
-    onTokenListClick: function(event) {
-      var input = this.$(event.target).children('.add_token')
-                                      .children('input')[0];
-      if (input !== undefined) {
-        input.focus();
-      }
-    },
-
-    onTokenInputFocusIn: function(event) {
-      var $tokenList = this.$(event.target).parents('.token_list');
-      $tokenList.removeClass('ui-state-default');
-      $tokenList.addClass('ui-state-focus');
-    },
-
-    onTokenInputFocusOut: function(event) {
-      var $tokenList = this.$(event.target).parents('.token_list');
-      $tokenList.removeClass('ui-state-focus');
-      $tokenList.addClass('ui-state-default');
-      this.addTokenFromInput(event.target);
-    },
-
-    addTokenFromInput: function(input) {
-      if (input.value.length > 0) {
-        var tokenHTML = this.renderTemplate('group-token', { groupName: input.value });
-        this.$(input.parentElement).before(tokenHTML);
-        input.value = '';
-      }
-    },
-
-    onTokenDelete: function(e) {
-      this.$(e.target).parent('li.token').remove();
     },
 
     loadAllGroups: function() {
