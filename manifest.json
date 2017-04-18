@@ -6,24 +6,12 @@
   },
   "parameters" : [
     {
-      "name": "notify_admin",
+      "name": "notify_users",
       "type": "text",
-      "default": "true"
-    },
-    {
-      "name": "notify_agent",
-      "type": "text",
-      "default": "true"
-    },
-    {
-      "name": "notify_end-user",
-      "type": "text",
-      "default": "false"
-    },
-    {
-      "name": "id_agent",
-      "type": "text",
-      "default": "15525947"
+      "default": {
+        "admin" : true,
+        "3428222" : true
+      }
     }
   ],
   "defaultLocale": "en",

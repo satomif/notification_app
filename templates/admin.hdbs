@@ -2,11 +2,11 @@
 
 <div class="groups form_field">
   <label>{{t 'label.groups'}}</label>
-  <ul class="span12 token_list highlightable">
+  <ul class="token_list highlightable">
   </ul>
   <div class="select_groups">
   </div>
-  <button class="select_token_submit" type="submit">追加</button>
+  <button class="btn-default select_token_submit" type="submit">追加</button>
 </div>
 
 

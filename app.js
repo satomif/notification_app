@@ -22,7 +22,7 @@
     },
 
     requests: {
-      sendMsg: function(text, groupIds) {
+      sendMsg: function(text, roleIds) {
         return {
           url: '/api/v2/apps/notify.json',
           type: 'POST',
@@ -30,7 +30,7 @@
             event: 'notificationMessage',
             body: {
               text: text,
-              groupIds: groupIds
+              roleIds: roleIds
             },
 //            app_id: this.id()
             app_id: 0
@@ -38,53 +38,44 @@
         };
       },
 
-      getAssignableGroups: function(page) {
+      getRoles: function() {
         return {
-          url: helpers.fmt('/api/v2/groups/assignable.json?page=%@', page),
-          type: 'GET'
-        };
-      },
-
-      getMyGroups: function() {
-        return {
-          url: '/api/v2/users/%@/group_memberships.json'.fmt(this.currentUser().id()),
+          url: '/api/v2/custom_roles.json',
           type: 'GET'
         };
       }
     },
 
     notifications: null,
-    myGroupIds: null,
-    groups: null,
+    myRoleId: null,
+    roles: null,
 
     init: function() {
       var self = this;
 
       this.notifications = [];
-      this.myGroupIds    = [];
-      this.groups        = {};
+      this.myRoleId    = null;
+      this.roles        = {};
 
-      this.ajax('getMyGroups').done(function(data) {
-        var groupMemberships = data.group_memberships;
-        self.myGroupIds = _.map(groupMemberships, function(group) {
-          return group.group_id;
+      this.ajax('getRoles').done(function(data) {
+        var customRoles = data.custom_roles;
+        _.map(customRoles, function(role) {
+          self.roles[role.id] = role.name;
         });
-      });
-
-      this.loadAllGroups().then(function(groupChunks) {
-        groupChunks.forEach(function(groupChunk) {
-          groupChunk.groups.forEach(function(group) {
-            self.groups[group.name] = group.id;
-          });
-        });
+        console.log('roles:');
+        console.log(self.roles);
+        self.myRoleId = this.currentUser().role();
         self.drawInbox();
       });
     },
 
     drawInbox: function() {
-      var ids = {};
-      ids[this.setting('id_agent')] = 'agent';
-      var isNotify = (this.setting('notify_' + ids[this.currentUser().role()]) === 'true');
+      var notify_users = this.setting('notify_users');
+      console.log('notify_users:');
+      console.log(notify_users);
+      console.log('myRoleId:');
+      console.log(this.myRoleId);
+      var isNotify = (notify_users[this.myRoleId] === true);
       this.switchTo('inbox', {
         isNotify: isNotify
       });
@@ -96,10 +87,12 @@
     },
 
     drawSelectBox: function() {
-      var html = '<select name="group">';
+      console.log('drawSelectBox:');
+      console.log(this.roles);
+      var html = '<select name="roles">';
       html += '<option value="">-</option>';
-      Object.keys(this.groups).forEach(function (key) {
-        html += '<option value="' + this.groups[key] + '">' + key + '</option>';
+      Object.keys(this.roles).forEach(function (key) {
+        html += '<option value="' + key + '">' + this.roles[key] + '</option>';
       }, this);
       html += '</select>';
       this.$('.select_groups').html(html);
@@ -113,7 +106,7 @@
       event.preventDefault();
       this.switchTo('admin');
       this.$('.groups input').autocomplete({
-        source: _.keys(this.groups)
+        source: _.keys(this.roles)
       });
       this.messageBox().focus();
       this.drawSelectBox();
@@ -126,8 +119,8 @@
 
     onSelectClick: function() {
       // グループ指定時
-      var groupId = this.$('.select_groups option:selected').val();
-      this.$('.token_list').append('<li class="group_id">' + groupId +  '</li>');
+      var roleId = this.$('.select_groups option:selected').val();
+      this.$('.token_list').append('<li class="role_id">' + roleId +  '</li>');
     },
 
     messageBoxValue: function() {
@@ -141,9 +134,9 @@
     sendMsg: function() {
       console.log('token_list:');
       console.log(this.tokenValues());
-      var groupIds = this.tokenValues();
+      var roleIds = this.tokenValues();
 
-      this.ajax('sendMsg', this.messageBoxValue(), groupIds);
+      this.ajax('sendMsg', this.messageBoxValue(), roleIds);
       this.drawInbox();
     },
 
@@ -162,6 +155,14 @@
 
       if ((event.ctrlKey || event.metaKey) && event.which === keyCode.ENTER) {
         this.sendMsg();
+      }
+    },
+
+    onTokenListClick: function(event) {
+      var input = this.$(event.target).children('.add_token')
+          .children('input')[0];
+      if (input !== undefined) {
+        input.focus();
       }
     },
 
@@ -221,12 +222,23 @@
     },
 
     onIncomingMessage: function(message, sender) {
-      if (sender.email() === this.currentUser().email() || sender.role() !== 'admin') {
+      console.log('!!!!message:');
+      console.log(message);
+      console.log('!!!!sender:');
+      console.log(sender);
+
+      if (sender.email() === this.currentUser().email()) {
         return false;
       }
 
-      var targetGroupIds = _.map(message.groupIds, function(id) { return parseInt(id, 10); });
-      if (message.groupIds && !_.intersection(this.myGroupIds, targetGroupIds).length) {
+      var targetRoleIds = _.map(message.roleIds, function(id) { return parseInt(id, 10); });
+      console.log('!!!!myRoleId:');
+      console.log(this.myRoleId);
+      console.log('!!!!targetRoleIds:');
+      console.log(targetRoleIds);
+      console.log('!!!!message.roleIds:');
+      console.log(message.roleIds);
+      if (message.roleIds && !_.intersection([this.myRoleId], targetRoleIds).length) {
         return false;
       }
 
@@ -267,7 +279,7 @@
       this.$('ul#messages').prepend(messageHTML);
     },
 
-    loadAllGroups: function() {
+/*    loadAllRoles: function() {
       var self = this;
 
       return this.promise(function(done) {
@@ -283,9 +295,9 @@
           });
         });
       });
-    },
+    },*/
 
-    groupRequests: function() {
+/*    groupRequests: function() {
       var self = this;
 
       return this.promise(function(done) {
@@ -299,7 +311,7 @@
           })));
         });
       });
-    }
+    }*/
   };
 
 }());
