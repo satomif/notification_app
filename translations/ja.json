@@ -3,10 +3,12 @@
     "cancel": "キャンセル",
     "imageInput": "画像のリンクを追加",
     "sendMessage": "一斉送信",
-    "toAdmin": "新規メッセージ:"
+    "toAdmin": "新規メッセージ:",
+    "removeCache": "キャッシュ削除"
   },
   "label": {
-    "groups": "グループ"
+    "groups": "グループ",
+    "groups_description": "非指定時はブロードキャスト"
   },
   "message": {
     "messagePlaceholder": "エージェントとメッセージを共有します。Markdownをお勧めします。",

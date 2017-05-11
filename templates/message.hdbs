@@ -2,7 +2,7 @@
   <a href="#" class="close" data-dismiss="alert">&times;</a>
 
   <p class="senderName">
-    {{senderName}}
+    {{senderName}} -> {{roles}}
   </p>
 
   <p class='date'>

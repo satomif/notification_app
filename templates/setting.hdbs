@@ -1,0 +1,6 @@
+<div class="setting">
+  <a href="#" class="clear-cache">{{t 'button.removeCache'}}</a>
+</div>
+<div class="pull-right">
+  <a href="#" class="cancel">{{t 'button.cancel'}}</a>
+</div>

@@ -1,14 +1,10 @@
 <textarea class="message" name="message" placeholder="{{t 'message.messagePlaceholder'}}"></textarea>
 
 <div class="groups form_field">
-  <label>{{t 'label.groups'}}</label>
-  <ul class="token_list highlightable">
-  </ul>
+  <label>{{t 'label.groups'}}({{t 'label.groups_description'}})</label>
   <div class="select_groups">
   </div>
-  <button class="btn-default select_token_submit" type="submit">追加</button>
 </div>
-
 
 <div class="pull-right">
   <a href="#" class="cancel">{{t 'button.cancel'}}</a>

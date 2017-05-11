@@ -1,22 +1,24 @@
 {
-  "name": "Notify App",
+  "name": "Notify_App",
   "author": {
     "name": "Zendesk",
     "email": "support@zendesk.com"
   },
   "parameters" : [
     {
-      "name": "notify_users",
+      "name": "sendable_users",
       "type": "text",
-      "default": {
-        "admin" : true,
-        "3428222" : true
-      }
+      "default": "admin,3428222"
+    },
+    {
+      "name": "notifiable_users",
+      "type": "text",
+      "default": "admin"
     }
   ],
-  "defaultLocale": "en",
-  "private": false,
+  "defaultLocale": "ja",
+  "private": true,
   "location": "top_bar",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "frameworkVersion": "1.0"
 }
